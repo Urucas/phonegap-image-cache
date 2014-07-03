@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.urucas.plugins.ImageCachePlugin" version="1.0">
+    <name>ImageCache</name>
+    <description>Cordova Image Cache Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,image,cache,phonegap</keywords>
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+    <js-module src="www/icache.js" name="icache">
+        <clobbers target="window.icache" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="ImageCachePlugin">
+                <param name="android-package" value="com.urucas.plugins.ImageCachePlugin"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/com/urucas/plugins/ImageCachePlugin.java"
+            target-dir="src/com/urucas/plugins"/>
+    </platform>
+</plugin>
