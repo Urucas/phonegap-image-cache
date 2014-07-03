@@ -2,7 +2,7 @@ try{
     var icache = {
     
 	  	load: function(){
-      	cordova.exec( success, error, "ImageCachePlugin", "load", [] );
+      	cordova.exec(null, null, "ImageCachePlugin", "load", []);
       }
     }
     module.exports = icache;
