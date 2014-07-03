@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.widget.Toast;
+import android.util.Log;
 
 public class ImageCachePlugin extends CordovaPlugin {
 
