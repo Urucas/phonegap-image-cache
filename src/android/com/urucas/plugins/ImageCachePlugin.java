@@ -25,8 +25,10 @@ public class ImageCachePlugin extends CordovaPlugin {
 	@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         
-		if(action.equals("load")) {
-			
-		  return false;
-    }	
+			if(action.equals("load")) {
+				Log.i("load","yeap");				
+		  	return false;
+	    }	
+			return true;
+		}
 }
