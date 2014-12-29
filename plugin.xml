@@ -8,9 +8,6 @@
     <engines>
         <engine name="cordova" version=">=3.0.0"/>
     </engines>
-    <js-module src="www/icache.js" name="icache">
-        <clobbers target="window.icache" />
-    </js-module>
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/widget">
             <feature name="ImageCachePlugin">
@@ -18,6 +15,10 @@
             </feature>
         </config-file>
         <source-file src="src/android/com/urucas/plugins/ImageCachePlugin.java"
+            target-dir="src/com/urucas/plugins"/>
+        <source-file src="src/android/com/urucas/plugins/ImageCache.java"
+            target-dir="src/com/urucas/plugins"/>
+        <source-file src="src/android/com/urucas/plugins/CordovaWebViewCached.java"
             target-dir="src/com/urucas/plugins"/>
     </platform>
 </plugin>
