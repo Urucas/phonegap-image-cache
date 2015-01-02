@@ -48,18 +48,19 @@ public class ImageCachePlugin extends CordovaPlugin {
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView){
-		super.initialize(cordova, webView);
 
 		try {
-			CordovaWebViewCached wbCached = new CordovaWebViewCached(cordova, this.webView);
-
+			CordovaWebViewCached wbCached = new CordovaWebViewCached(cordova, webView);
+			CordovaActivity activity = (CordovaActivity) cordova.getActivity();
+			
 			try {
 				Class ca = Class.forName("org.apache.cordova.CordovaWebView");
 				Field[] fs = ca.getDeclaredFields();
 				for(int i=0; i<fs.length; i++){
 					if(fs[i].getName().equals("viewClient")) {
 						fs[i].setAccessible(true);
-						fs[i].set(this.webView, wbCached);
+						fs[i].set(webView, wbCached);
+						
 						Log.i("webView client changed", "i think so");
 					}
 				}
@@ -67,7 +68,6 @@ public class ImageCachePlugin extends CordovaPlugin {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
