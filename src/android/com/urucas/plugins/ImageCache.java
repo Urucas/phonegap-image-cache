@@ -45,7 +45,6 @@ public class ImageCache {
 		}
 	}
 
-
 	protected Map<String, CacheEntry> cacheEntries = new HashMap<String, CacheEntry>();
 	protected Activity activity = null;
 	protected File rootDir = null;
@@ -112,8 +111,6 @@ public class ImageCache {
 		return null;
 	}
 
-
-
 	private void downloadAndStore(String url, CacheEntry cacheEntry, File cachedFile)
 			throws IOException {
 
@@ -161,3 +158,4 @@ public class ImageCache {
 		return "";
 	}
 }
+

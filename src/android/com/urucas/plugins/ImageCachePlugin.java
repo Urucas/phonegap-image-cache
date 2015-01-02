@@ -1,15 +1,9 @@
 package com.urucas.plugins;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaActivity;
-import org.apache.cordova.CordovaChromeClient;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.CordovaWebViewClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,26 +15,31 @@ public class ImageCachePlugin extends CordovaPlugin {
 
 	private static final String TAG = "ImageCachePlugin";
 	private static ImageCache _cache;
-	private static ImageCachePlugin _instance;
-
-	public ImageCachePlugin(){
-		_instance = this;
-	}
-
-	public static ImageCache getCache() {
-		if(_cache == null){
-			_cache = new ImageCache(_instance.cordova.getActivity()); 
-		}
+	private static CordovaWebView _webView;
+	
+	public static long CACHE_TIME = 5*ImageCache.ONE_DAY;
+	
+	public static ImageCache getCache(){
 		return _cache;
 	}
-
+	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-
-		if(action.equals("init")) {
+		if(action.equals("config")) {
+			int duration = 5;
+			try {
+				JSONObject params = args.getJSONObject(0);
+				duration = params.getInt("duration");
+				duration = duration < 1 ? 1: duration;
+				duration = duration > 7 ? 7: duration;
+				
+			}catch(Exception e){}
+			
+			CACHE_TIME = duration*ImageCache.ONE_DAY;
 			return true;
+			
 		}else if(action.equals("clear")) {
-
+			
 			return true;
 		}
 		return false;
@@ -50,25 +49,18 @@ public class ImageCachePlugin extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView){
 
 		try {
-			CordovaWebViewCached wbCached = new CordovaWebViewCached(cordova, webView);
-			CordovaActivity activity = (CordovaActivity) cordova.getActivity();
+			final CordovaWebViewCached wbCached = new CordovaWebViewCached(cordova, webView);
+			_cache = new ImageCache(cordova.getActivity());
+			_webView = webView;
 			
-			try {
-				Class ca = Class.forName("org.apache.cordova.CordovaWebView");
-				Field[] fs = ca.getDeclaredFields();
-				for(int i=0; i<fs.length; i++){
-					if(fs[i].getName().equals("viewClient")) {
-						fs[i].setAccessible(true);
-						fs[i].set(webView, wbCached);
-						
-						Log.i("webView client changed", "i think so");
-					}
+			Handler handler = new Handler(cordova.getActivity().getApplicationContext().getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					_webView.setWebViewClient(wbCached);
 				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			});
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.i(TAG, "Error reimplementing CordovaActivity");
