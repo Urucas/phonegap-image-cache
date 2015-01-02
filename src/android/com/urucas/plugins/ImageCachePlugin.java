@@ -50,31 +50,24 @@ public class ImageCachePlugin extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView){
 		super.initialize(cordova, webView);
 
-		final CordovaInterface _cordova = cordova;
-		final CordovaWebView _webView = webView;
 		try {
-			Handler mainHandler = new Handler(cordova.getActivity().getApplicationContext().getMainLooper());
-			mainHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					CordovaWebViewCached wbCached = new CordovaWebViewCached(_cordova, _webView);
+			CordovaWebViewCached wbCached = new CordovaWebViewCached(cordova, this.webView);
 
-					try {
-						Class ca = Class.forName("org.apache.cordova.CordovaWebView");
-						Field[] fs = ca.getDeclaredFields();
-						for(int i=0; i<fs.length; i++){
-							if(fs[i].getName().equals("viewClient")) {
-								fs[i].setAccessible(true);
-								fs[i].set(_webView, wbCached);
-								Log.i("webView client changed", "i think so");
-							}
-						}
-
-					} catch (Exception e) {
-						e.printStackTrace();
+			try {
+				Class ca = Class.forName("org.apache.cordova.CordovaWebView");
+				Field[] fs = ca.getDeclaredFields();
+				for(int i=0; i<fs.length; i++){
+					if(fs[i].getName().equals("viewClient")) {
+						fs[i].setAccessible(true);
+						fs[i].set(this.webView, wbCached);
+						Log.i("webView client changed", "i think so");
 					}
 				}
-			});
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
