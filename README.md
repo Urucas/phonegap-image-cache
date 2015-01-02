@@ -15,7 +15,7 @@ As soon as the plugin it's installed it's fully working. The plugin override the
 
 You can change the days using:
 ```javascript
-window.icache.config(2);
+window.icache.config(2); // 2 days cache
 ```
 
 TODO
